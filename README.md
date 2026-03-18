@@ -29,7 +29,7 @@ Tutorials will be uploaded in due course. In the meantime, [this video](https://
 
 The optimisation of perforated plates subject to buckling typically requires computationally intensive parametric finite element (FE) studies. *Shape annealing* is a heuristic optimisation technique, where design variables are geometric shape parameters. This rule-based technique is a robust alternative to numerical optimisation, capable of finding near-optimal solutions without great computational effort. Based on *simulated annealing*, this method is intuitive, and results are interpretable. This greatly appeals to structural engineering, where optimisation can be deemed risky for its black-box nature.
 
-In **Abalone**, an eligible rule is selected, and used to modify the design state $d_i$. The *efficiency* $E_i$ at state $d_i$ is compared to the *efficiency* $E_{i+1}$ at the resulting state $d_{i+1}$; if $E_{i+1} < E_i$, then the resulting design state is more feasible (for objective minimisation) and is accepted. However, if $E_{i+1}≥E_i$, then the resulting design state may only be accepted according to a probability given in terms of the *cooling function* $p(E_{i+1})$. If this probability $p(E_{i+1}) > r$ (where $r$ is a pseudo-random number between 0 and 1), then the resulting state is accepted, despite it being *less efficient* than the previous state. Otherwise, the design state $d_{i+1}$ is rejected, and a new eligible rule is selected.
+In **Abalone**, an eligible rule is selected, and used to modify the design state $d_i$. The *efficiency* $E_i$ at state $d_i$ is compared to the *efficiency* $E_{i+1}$ at the resulting state $d_{i+1}$; if $E_{i+1} < E_i$, then the resulting design state is more feasible (for objective minimisation) and is accepted. However, if $E_{i+1}≥E_i$, then the resulting design state may only be accepted according to a probability given in terms of the *cooling function* $p(E_{i+1})$. If this probability $p(E_{i+1}) > r$ (where $r$ is a pseudo-random number between 0 and 1), then the resulting state is accepted, despite it being *less efficient* than the previous state. Otherwise, the design state $d_{i+1}$ is rejected, and a new eligible rule is selected.
 
 $$
 p(E_{i+1}) = \exp \bigg(\frac{E_{i+1} - E_i}{T}\bigg) > r
@@ -50,13 +50,13 @@ The user inputs the dimensions of the plate (e.g. the dimensions of a rack secti
 - $Y$: Width (mm)
 - $t$: Thickness (mm)
 
-Please note that **Abalone** was developed for thin plates, i.e. those where $Y / t>75$.
+Please note that **Abalone** was developed for thin plates, i.e. those where $Y / t>75$.
 
 The user inputs the material properties:
 - $E$: Young’s Modulus (MPa)
 - $\nu$: Poisson’s Ratio
 
-**Abalone** finds the most optimal arrangement of rectangular perforations defined by a height $h$ (mm), and length $l$ (mm). The user must specify the aspect ratio $l/h$ of these perforations, which will be maintained throughout optimisation. However, note that the size of these perforations may shrink or grow (i.e. $h$ or $l$ may change, while the ratio $l/h$ remains the same). The user inputs:
+**Abalone** finds the most optimal arrangement of rectangular perforations defined by a height $h$ (mm), and length $l$ (mm). The user must specify the aspect ratio $l/h$ of these perforations, which will be maintained throughout optimisation. However, note that the size of these perforations may shrink or grow (i.e. $h$ or $l$ may change, while the ratio $l/h$ remains the same). The user inputs:
 
 - $h_0$: The initial hole height (mm)
 - $l_0$: The initial hole length (mm)
@@ -92,7 +92,7 @@ When Abalone optimises the geometry and arrangement of perforations within the p
 - $s_{y,max}$: Maximum Y-Spacing
 - $S_{yo}$: Y-Margin
 
-The margin restricts how close to either edge the perforations may reach. It is recommended to set $S_{xo}=Y$ (the plate width), which has been found to improve performance. If there is no minimum, set equal to 0. If there is no maximum, set $s_{x,max}=X$ and $s_{y,max}=Y$.
+The margin restricts how close to either edge the perforations may reach. It is recommended to set $S_{xo}=Y$ (the plate width), which has been found to improve performance. If there is no minimum, set equal to 0. If there is no maximum, set $s_{x,max}=X$ and $s_{y,max}=Y$.
 
 ### 3. Optimise
 
@@ -107,20 +107,30 @@ This is where shape annealing optimisation takes place. The user defines a list 
 - $G$: An increase to the hole length by 10% (i.e. the perforation(s) `grows’)
 - $S$: A reduction to the hole length by 10% (i.e. the perforation(s) `shrinks’)
 
-The cooling function can be (1) Linear, (2) Exponential, (3) Logarithmic, (4) Reciprocal or (5) Quadratic. These functions require the initial temperature ($T_0$), and alpha ($\alpha$), which define the cooling rate $T(i)$ in terms of the iteration number i:
+The cooling function can be (1) Linear, (2) Exponential, (3) Logarithmic, (4) Reciprocal or (5) Quadratic. These functions require the initial temperature ($T_0$), and alpha ($\alpha$), which define the cooling rate $T(i)$ in terms of the iteration number i:
 
 1. *Linear*
-$$ T(i) = \max(T_0 - \alpha \cdot i, 0) $$
+$$ 
+T(i) = \max(T_0 - \alpha \cdot i, 0)
+$$
 2. *Exponential*
-$$ T(i) = T_0(\alpha^i) $$
+$$
+T(i) = T_0(\alpha^i)
+$$
 3. *Logarithmic*
-$$ T(i) = \frac{T_0}{\ln(i + \alpha)} $$
+$$
+T(i) = \frac{T_0}{\ln(i + \alpha)}
+$$
 4. *Reciprocal*
-$$ T(i) = \frac{T_0}{1 + \alpha \cdot i} $$
+$$
+T(i) = \frac{T_0}{1 + \alpha \cdot i}
+$$
 5. *Quadratic*
-$$ T(i) = \frac{T_0}{1 + \alpha \cdot i^2} $$
+$$
+T(i) = \frac{T_0}{1 + \alpha \cdot i^2}
+$$
 
-Examples of these cooling functions are shown below. In these examples, $T_0=1$ and $\alpha=0.5$. The probability of accepting a design state such that $E_{i+1}=0.9 \cdot E_i$ is plotted in addition to the Temperature on the $y$-axis. To understand how these parameters control the *probability of acceptance* of a less efficient design state, the user should see the [tutorial](https://vimeo.com/1174734418). For a new user, it is recommended to employ exponential cooling with $T_0=1$ and $\alpha≈0.5$.
+Examples of these cooling functions are shown below. In these examples, $T_0=1$ and $\alpha=0.5$. The probability of accepting a design state such that $E_{i+1}=0.9 \cdot E_i$ is plotted in addition to the Temperature on the $y$-axis. To understand how these parameters control the *probability of acceptance* of a less efficient design state, the user should see the [tutorial](https://vimeo.com/1174734418). For a new user, it is recommended to employ exponential cooling with $T_0=1$ and $\alpha≈0.5$.
 
 ![alt text](https://github.com/EllieNar/Abalone/blob/main/Figures/Functions.png)
 
@@ -130,13 +140,13 @@ Finally, the user must select the *efficiency mode*, i.e. how the objective func
 
 $$ E(I) = \lambda \cdot \frac{N_{i,h}}{N_0} \cdot \frac{A_0}{A_0 - A} $$
 
-Where $N_{i,h}$ is the elastic buckling capacity at design state $d_i$ and $N_0$ is the elastic buckling capacity of the unperforated plate. The gross plate area is given by $A_0$, and the perforated area is $A$.
+Where $N_{i,h}$ is the elastic buckling capacity at design state $d_i$ and $N_0$ is the elastic buckling capacity of the unperforated plate. The gross plate area is given by $A_0$, and the perforated area is $A$.
 
-By default, $\lambda=1$. However, the user can select to favour either more columns ($n_m = n_c$) or more rows ($n_m = n_r$), by selecting *EfficiencyA* or *EfficiencyB*:
+By default, $\lambda=1$. However, the user can select to favour either more columns ($n_m = n_c$) or more rows ($n_m = n_r$), by selecting *EfficiencyA* or *EfficiencyB*:
 
 $$ \lambda = \frac{1}{1 + e^{k - n_m}} $$
 
-And where $k \in (1,5)$ is an integer (3 is recommended). As this is a heuristic optimisation procedure, the user should change the random seed at least 30 times to create a pool of possible solutions, recording the seed with the best output. A more experienced user will also explore how $\alpha$, $T_0$ and $T(i)$ affect the output.
+And where $k \in (1,5)$ is an integer (3 is recommended). As this is a heuristic optimisation procedure, the user should change the random seed at least 30 times to create a pool of possible solutions, recording the seed with the best output. A more experienced user will also explore how $\alpha$, $T_0$ and $T(i)$ affect the output.
 
 ### 4. Undo
 
@@ -144,7 +154,7 @@ And where $k \in (1,5)$ is an integer (3 is recommended). As this is a heurist
 
 _Fig. 7: The Undo component._
 
-The user can examine the state of the output at every step with the *Undo* component. This takes the final *optimised geometry* and `steps back’ the desired number of steps. Then, the result can be fed into the *Deconstruct* component…
+The user can examine the state of the output at every step with the *Undo* component. This takes the final *optimised geometry* and `steps back’ the desired number of steps. Then, the result can be fed into the *Deconstruct* component…
 
 ### 5. Deconstruct
 
@@ -166,9 +176,9 @@ The geometry output from the Optimise component, or the Undo component (at the d
 
 ## Known Issues
 
-**Abalone** is particularly accurate for perforations with aspect ratios $l / h \leq 2$. The elastic buckling capacity $N_{i,h}$ predicted using Abalone can be up to 35% unconservative for plates with one row of large perforations, but less than 10\% unconservative for plates with two rows of small rows of perforations. Therefore, Abalone should be restricted to optimise plates with multiple rows of small-medium perforations (hole height not exceeding 35\% of the plate width), or with one row of perforations of aspect ratios less than two.
+**Abalone** is particularly accurate for perforations with aspect ratios $l / h \leq 2$. The elastic buckling capacity $N_{i,h}$ predicted using Abalone can be up to 35% unconservative for plates with one row of large perforations, but less than 10\% unconservative for plates with two rows of small rows of perforations. Therefore, Abalone should be restricted to optimise plates with multiple rows of small-medium perforations (hole height not exceeding 35\% of the plate width), or with one row of perforations of aspect ratios less than two.
 
-Repeated use of shape annealing for perforation optimisation has determined a tendency for one row of tall perforations, particularly for $l / h \leq 1$. To optimise a rack section web, the user must choose a non-default efficiency function in the optimise component. When a non-default efficiency function is selected such that $n_m=n_c$, a study found that the optimiser did not increase the perforation dimensions beyond $h_{min}$ and $l_{min}$ (i.e. the minimum dimension imposed by the Constraints component). This suggests that a more efficient perforated plate is one with minimal perforation area, and the user should pay attention to the Constraints they impose.
+Repeated use of shape annealing for perforation optimisation has determined a tendency for one row of tall perforations, particularly for $l / h \leq 1$. To optimise a rack section web, the user must choose a non-default efficiency function in the optimise component. When a non-default efficiency function is selected such that $n_m=n_c$, a study found that the optimiser did not increase the perforation dimensions beyond $h_{min}$ and $l_{min}$ (i.e. the minimum dimension imposed by the Constraints component). This suggests that a more efficient perforated plate is one with minimal perforation area, and the user should pay attention to the Constraints they impose.
 
 These observations are the findings of the paper entitled *Shape-Annealing Optimisation of Perforations in Rack Sections Subject to Buckling*, due to be published soon. This research makes reference to two papers by Elenor Naraidoo on approximating $N_{i,h}$ without numerical procedure (i.e. in absence of FE analysis). These approximations are employed by **Abalone**. Note that this paper uses a feed-forwarad network to classify the different buckling modes of plates with tall perforations ($l_y/b \geq 0.6$), whereas **Abalone** uses an SVM classifier.
 
@@ -186,6 +196,6 @@ See the [GitHub link](https://link-to-git-hub/)
 
 ### Published
 
-1. E. Naraidoo and B. Rossi. “Local buckling load of a perforated plate- A computational study”. In: Thin-Walled Structures 215, Part A (Oct. 2025). url: [http://dx.doi.org/10.1016/j.tws.2025.113445](http://dx.doi.org/10.1016/j.tws.2025.113445).
+1. E. Naraidoo and B. Rossi. “Local buckling load of a perforated plate- A computational study”. In: Thin-Walled Structures 215, Part A (Oct. 2025). url:[http://dx.doi.org/10.1016/j.tws.2025.113445](http://dx.doi.org/10.1016/j.tws.2025.113445).
 
-2. E. Naraidoo and B. Rossi. “An experimental, numerical and analytical study of local buckling in perforated plates”. In: Thin-Walled Structures 219 (Feb. 2026), p. 114269. url: [http://dx.doi.org/10.1016/j.tws.2025.114269](http://dx.doi.org/10.1016/j.tws.2025.114269)
+2. E. Naraidoo and B. Rossi. “An experimental, numerical and analytical study of local buckling in perforated plates”. In: Thin-Walled Structures 219 (Feb. 2026), p. 114269. url:[http://dx.doi.org/10.1016/j.tws.2025.114269](http://dx.doi.org/10.1016/j.tws.2025.114269)
