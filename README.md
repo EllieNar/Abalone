@@ -158,7 +158,7 @@ This allows the user to record the geometry, efficiency, capacity, and rules sel
 
 ### 6. Mesh
 
-![alt text](https://github.com/EllieNar/Abalone/main/Figures/Mesh.png)
+![alt text](https://github.com/EllieNar/Abalone/blob/main/Figures/Mesh.png)
 
 _Fig. 9: The Mesh component._
 
