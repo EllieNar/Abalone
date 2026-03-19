@@ -110,25 +110,24 @@ This is where shape annealing optimisation takes place. The user defines a list 
 The cooling function can be (1) Linear, (2) Exponential, (3) Logarithmic, (4) Reciprocal or (5) Quadratic. These functions require the initial temperature ($T_0$), and alpha ($\alpha$), which define the cooling rate $T(i)$ in terms of the iteration number i:
 
 1. *Linear*
-$$ 
-T(i) = \max(T_0 - \alpha \cdot i, 0)
-$$
+
+$$T(i) = \max(T_0 - \alpha \cdot i, 0)$$
+
 2. *Exponential*
-$$
-T(i) = T_0(\alpha^i)
-$$
+
+$$T(i) = T_0(\alpha^i)$$
+
 3. *Logarithmic*
-$$
-T(i) = \frac{T_0}{\ln(i + \alpha)}
-$$
+
+$$T(i) = \frac{T_0}{\ln(i + \alpha)}$$
+
 4. *Reciprocal*
-$$
-T(i) = \frac{T_0}{1 + \alpha \cdot i}
-$$
+
+$$T(i) = \frac{T_0}{1 + \alpha \cdot i}$$
+
 5. *Quadratic*
-$$
-T(i) = \frac{T_0}{1 + \alpha \cdot i^2}
-$$
+
+$$T(i) = \frac{T_0}{1 + \alpha \cdot i^2}$$
 
 Examples of these cooling functions are shown below. In these examples, $T_0=1$ and $\alpha=0.5$. The probability of accepting a design state such that $E_{i+1}=0.9 \cdot E_i$ is plotted in addition to the Temperature on the $y$-axis. To understand how these parameters control the *probability of acceptance* of a less efficient design state, the user should see the [tutorial](https://vimeo.com/1174734418). For a new user, it is recommended to employ exponential cooling with $T_0=1$ and $\alpha≈0.5$.
 
